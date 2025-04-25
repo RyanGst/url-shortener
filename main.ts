@@ -18,8 +18,6 @@ app.post("/create", async (c) => {
     version: deno.version,
     body,
   });
-
-
 });
 
 app.get("/:id", (c) => {

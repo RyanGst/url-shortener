@@ -5,12 +5,12 @@ import deno from "./deno.json" with { type: "json" };
 Deno.test({
   name: "health check",
   async fn() {
-    const res = await app.request("/health")
-    assertEquals(res.status, 200)
-    const body = await res.json()
-    assertEquals(body.status, "ok")
-    assertEquals(body.version, deno.version)
-  }
+    const res = await app.request("/health");
+    assertEquals(res.status, 200);
+    const body = await res.json();
+    assertEquals(body.status, "ok");
+    assertEquals(body.version, deno.version);
+  },
 });
 
 Deno.test({

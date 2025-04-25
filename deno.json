@@ -8,6 +8,6 @@
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
-  }, 
+  },
   "version": "0.0.1"
 }
