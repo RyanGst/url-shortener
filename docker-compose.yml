@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DENO_ENV=development
+    command: ["deno", "run", "--watch", "--allow-net", "main.ts"]
+  redis:
+    image: 'redis/redis-stack'
+    ports:
+      - '6379:6379'
+      - '8001:8001'
+    environment:
+      - REDIS_PASSWORD=redis
