@@ -8,7 +8,8 @@ services:
       - "8000:8000"
     environment:
       - DENO_ENV=development
-    command: ["deno", "run", "--watch", "--allow-net", "main.ts"]
+      - REDIS_URL=redis://redis:6379
+    command: ["deno", "run", "--watch", "--allow-net", "--allow-env", "main.ts"]
   redis:
     image: 'redis/redis-stack'
     ports:

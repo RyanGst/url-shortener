@@ -16,24 +16,26 @@ app.get("/health", (c) => {
 app.post("/create", async (c) => {
   const body = await c.req.json();
 
+  const id = crypto.randomUUID();
+  await redis.set(id, body.url);
+
   return c.json({
     status: "ok",
     version: deno.version,
     body,
-  });
-});
-
-app.get("/:id", (c) => {
-  const id = c.req.param("id");
-  return c.json({
-    status: "ok",
-    version: deno.version,
     id,
   });
 });
 
-redis.on("connect", () => {
-  console.log("Connected to Redis");
+app.get("/:id", async (c) => {
+  const id = c.req.param("id");
+  const url = await redis.get(id);
+  if (!url) {
+    return c.json({
+      status: "not found",
+    }, 404);
+  }
+  return c.redirect(url);
 });
 
 Deno.serve(app.fetch);

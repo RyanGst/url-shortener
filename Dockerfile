@@ -10,4 +10,4 @@ COPY . .
 RUN deno cache main.ts
 
 # Run the apps
-CMD ["deno", "run", "--allow-net", "main.ts"]
+CMD ["deno", "run", "--allow-net", "--allow-env", "main.ts"]

@@ -5,7 +5,7 @@ let client: RedisClientType | null = null;
 export async function getClient() {
   if (!client) {
     client = createClient({
-      url: "redis://redis:6379",
+      url: Deno.env.get("REDIS_URL"),
     });
 
     await client.connect();
