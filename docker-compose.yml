@@ -4,18 +4,21 @@ services:
     build: .
     depends_on:
       - redis
-    volumes:
-      - .:/app
     ports:
       - "8000:8000"
     environment:
-      - DENO_ENV=development
-      - REDIS_URL=redis://redis:6379
-    command: ["deno", "run", "--watch", "--allow-net", "--allow-env", "main.ts"]
+      - DENO_ENV=${DENO_ENV:-production}
+      - REDIS_HOST=${REDIS_HOST:-redis}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis}
+    command: ["deno", "run", "--allow-net", "--allow-env", "main.ts"]
+    restart: unless-stopped
   redis:
     image: "redis/redis-stack"
-    ports:
-      - "6379:6379"
-      - "8001:8001"
-    environment:
-      - REDIS_PASSWORD=redis
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass ${REDIS_PASSWORD:-redis}"]
+
+volumes:
+  redis_data:
