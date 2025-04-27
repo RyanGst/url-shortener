@@ -5,6 +5,10 @@ import { getClient } from "./src/services/redis.ts";
 
 Deno.test({
   name: "health check",
+  permissions: {
+    net: true,
+    env: true,
+  },
   async fn() {
     const res = await app.request("/health");
     assertEquals(res.status, 200);
@@ -16,6 +20,10 @@ Deno.test({
 
 Deno.test({
   name: "create link",
+  permissions: {
+    net: true,
+    env: true,
+  },
   async fn() {
     const res = await app.request("/create", {
       method: "POST",
@@ -36,6 +44,10 @@ Deno.test({
 
 Deno.test({
   name: "get link",
+  permissions: {
+    net: true,
+    env: true,
+  },
   async fn() {
     const originalUrl = "https://example.com?but-really-long-query-string=1";
     const createRes = await app.request("/create", {
@@ -58,6 +70,10 @@ Deno.test({
 
 Deno.test({
   name: "get link not found",
+  permissions: {
+    net: true,
+    env: true,
+  },
   async fn() {
     const res = await app.request("/1");
     assertEquals(res.status, 404);
