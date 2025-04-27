@@ -15,13 +15,11 @@ export async function getClient(): Promise<RedisClientType> {
     console.log(`Attempting to connect to Redis at ${host}:${port}`);
 
     const url = `redis://${host}:${port}`;
-    console.log(`Using URL: ${url}, password: ${password}`);
+   
     client = createClient({
       url: url,
       password: password,
     });
-
-    client.on("error", (err) => console.error("Redis Client Error:", err));
 
     await client.connect();
     console.log("Redis client connected successfully.");
