@@ -9,6 +9,8 @@ export async function getClient() {
     });
 
     await client.connect();
+    client.configSet("appendonly", "yes");
+
   }
   return client;
 }

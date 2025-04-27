@@ -15,7 +15,6 @@ app.get("/health", (c) => {
 
 app.post("/create", async (c) => {
   const body = await c.req.json();
-
   const id = crypto.randomUUID();
   await redis.set(id, body.url);
 
