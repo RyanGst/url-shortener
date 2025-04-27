@@ -11,9 +11,9 @@ services:
       - REDIS_URL=redis://redis:6379
     command: ["deno", "run", "--watch", "--allow-net", "--allow-env", "main.ts"]
   redis:
-    image: 'redis/redis-stack'
+    image: "redis/redis-stack"
     ports:
-      - '6379:6379'
-      - '8001:8001'
+      - "6379:6379"
+      - "8001:8001"
     environment:
       - REDIS_PASSWORD=redis
