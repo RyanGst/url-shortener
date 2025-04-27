@@ -1,5 +1,8 @@
 import { Hono } from "hono";
 import deno from "./deno.json" with { type: "json" };
+import { getClient } from "./src/services/redis.ts";
+
+const redis = await getClient();
 
 const app = new Hono();
 
@@ -29,5 +32,10 @@ app.get("/:id", (c) => {
   });
 });
 
+redis.on("connect", () => {
+  console.log("Connected to Redis");
+});
+
 Deno.serve(app.fetch);
+
 export default app;

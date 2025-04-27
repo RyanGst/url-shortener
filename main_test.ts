@@ -1,7 +1,6 @@
-import app from "./main.ts";
-import { assertEquals,  } from "https://deno.land/std@0.222.0/assert/mod.ts";
+import { assertEquals } from "@std/assert";
 import deno from "./deno.json" with { type: "json" };
-
+import app from "./main.ts";
 
 Deno.test({
   name: "health check",
