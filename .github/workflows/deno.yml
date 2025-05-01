@@ -18,7 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  run-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,10 +31,6 @@ jobs:
       #   with:
       #     deno-version: v2.x
 
-      # Optional: Build the Docker image(s) if needed explicitly
-      # - name: Build Docker Images
-      #   run: docker-compose build app # Build only the app service if needed
-
       # Run linter using docker-compose
       - name: Run linter
         run: docker compose run --rm app deno lint
@@ -42,3 +38,26 @@ jobs:
       # Run tests using docker-compose with specified permissions
       - name: Run tests
         run: docker compose run --rm app deno test --allow-net --allow-read --allow-env
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    needs:
+      - run-tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/ryangst/url-shortener:latest
+            ghcr.io/ryangst/url-shortener:${{ github.sha }}
