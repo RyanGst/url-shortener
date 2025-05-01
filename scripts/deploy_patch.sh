@@ -38,7 +38,7 @@ jq ".version = \"$new_version\"" "$deno_json_path" > "$tmp_file" && mv "$tmp_fil
 # Git commands
 git add deno.json
 git commit -m "New version: $new_version [skip ci]"
-git tag "v$new_version"
+git tag -a "v$new_version" -m "Version $new_version" 
 git push --follow-tags
 
 echo "Version bumped to $new_version and pushed." 
