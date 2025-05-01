@@ -39,6 +39,9 @@ jobs:
       - name: Run tests
         run: docker compose run --rm app deno test --allow-net --allow-read --allow-env
   build-and-push-image:
+    permissions:
+      contents: read
+      packages: write
     runs-on: ubuntu-latest
     needs:
       - run-tests
@@ -48,9 +51,7 @@ jobs:
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
-        permissions:
-          contents: read
-          packages: write
+
         with:
           registry: https://ghcr.io
           username: ${{ github.actor }}
