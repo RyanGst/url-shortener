@@ -7,7 +7,7 @@
   },
   "tasks": {
     "start": "deno run --allow-net main.ts",
-    "deploy": "deno run --allow-net main.ts"
+    "deploy": "deno run deploy.ts && git push --follow-tags"
   },
   "compilerOptions": {
     "jsx": "precompile",
