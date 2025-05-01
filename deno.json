@@ -6,11 +6,12 @@
     "redis": "npm:redis@^4.7.0"
   },
   "tasks": {
-    "start": "deno run --allow-net main.ts"
+    "start": "deno run --allow-net main.ts",
+    "deploy": "deno run --allow-net main.ts"
   },
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }
