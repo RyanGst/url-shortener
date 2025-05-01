@@ -44,7 +44,7 @@ console.log(`Version bumped from ${currentVersion} to ${newVersion} in ${configP
 
 // Git commands
 const tagName = `v${newVersion}`;
-const commitMessage = `New version: ${tagName} [skip ci]`;
+const commitMessage = `New version: ${tagName}`;
 
 await runCommand("git", ["add", configPath]);
 await runCommand("git", ["commit", "-m", commitMessage]);
