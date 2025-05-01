@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   app:
+    image: ghcr.io/ryangst/url-shortener:latest
     build: .
     depends_on:
       - redis
