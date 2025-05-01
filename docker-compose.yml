@@ -1,18 +1,47 @@
 version: "3.8"
 services:
+  traefik:
+    image: traefik:v3.3
+    command:
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=ryangst.hire@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    ports:
+      - mode: host
+        protocol: tcp
+        published: 80
+        target: 80
+      - mode: host
+        protocol: tcp
+        published: 443
+        target: 443
+    volumes:
+       - letsencrypt:/letsencrypt
+       - /var/run/docker.sock:/var/run/docker.sock
   app:
     image: ghcr.io/ryangst/url-shortener:latest
     build: .
     depends_on:
       - redis
-    ports:
-      - "80:8000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`url.unnamd.cloud`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
+      - "traefik.http.routers.app.service=app"
+      - "traefik.http.services.app.loadbalancer.server.port=8000"
     environment:
       - DENO_ENV=${DENO_ENV:-production}
       - REDIS_HOST=${REDIS_HOST:-redis}
       - REDIS_PORT=${REDIS_PORT:-6379}
       - REDIS_PASSWORD=${REDIS_PASSWORD:-redis}
-    command: ["deno", "run", "--allow-net", "--allow-env", "main.ts"]
+    command: [ "deno", "run", "--allow-net", "--allow-env", "main.ts" ]
     restart: unless-stopped
     deploy:
       update_config:
@@ -22,7 +51,7 @@ services:
     volumes:
       - redis_data:/data
     restart: unless-stopped
-    command: ["redis-server", "--requirepass ${REDIS_PASSWORD:-redis}"]
+    command: [ "redis-server", "--requirepass ${REDIS_PASSWORD:-redis}" ]
 
 volumes:
   redis_data:
