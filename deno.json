@@ -7,11 +7,11 @@
   },
   "tasks": {
     "start": "deno run --allow-net main.ts",
-    "deploy": "deno run deploy.ts && git push --follow-tags"
+    "deploy": "deno run deploy.ts patch && git push --follow-tags"
   },
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
   },
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
