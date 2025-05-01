@@ -28,7 +28,6 @@ app.post("/create", async (c) => {
 
   return c.json({
     status: "ok",
-    version: deno.version,
     body,
     id,
   });
