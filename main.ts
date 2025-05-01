@@ -1,10 +1,14 @@
 import { Hono } from "hono";
+import { serveStatic } from "hono/deno";
 import deno from "./deno.json" with { type: "json" };
 import { getClient } from "./src/services/redis.ts";
 
 const redis = await getClient();
 
 const app = new Hono();
+
+app.use('*', serveStatic({ root: './public' }))
+app.get('/', (c) => c.html(`<script>window.location.href = '/index.html'</script>`))
 
 app.get("/health", (c) => {
   return c.json({

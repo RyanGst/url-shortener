@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        input[type="url"] { width: 300px; padding: 8px; margin-right: 5px; }
+        button { padding: 8px 15px; }
+        #result { margin-top: 15px; }
+        #result a { font-weight: bold; }
+        #error { margin-top: 15px; color: red; }
+    </style>
+</head>
+<body>
+    <h1>URL Shortener</h1>
+
+    <form id="shorten-form">
+        <input type="url" id="url-input" placeholder="Enter URL to shorten" required>
+        <button type="submit">Shorten</button>
+    </form>
+
+    <div id="result"></div>
+    <div id="error"></div>
+
+    <script>
+        const form = document.getElementById('shorten-form');
+        const urlInput = document.getElementById('url-input');
+        const resultDiv = document.getElementById('result');
+        const errorDiv = document.getElementById('error');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+            resultDiv.textContent = '';
+            errorDiv.textContent = '';
+
+            const urlToShorten = urlInput.value;
+
+            try {
+                const response = await fetch('/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: urlToShorten }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'ok' && data.id) {
+                    const shortUrl = `${window.location.origin}/${data.id}`;
+                    resultDiv.innerHTML = `Shortened URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
+                    urlInput.value = '';
+                } else {
+                    throw new Error('Invalid response from server.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = `Error shortening URL: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
