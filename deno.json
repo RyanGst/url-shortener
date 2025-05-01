@@ -7,7 +7,8 @@
   },
   "tasks": {
     "start": "deno run --allow-net --env-file=.env main.ts",
-    "deploy": "sh scripts/deploy_patch.sh"
+    "deploy": "sh scripts/deploy_patch.sh",
+    "test": "docker compose run --rm app deno test --allow-net --allow-read --allow-env"
   },
   "compilerOptions": {
     "jsx": "precompile",

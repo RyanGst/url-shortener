@@ -9,13 +9,15 @@ export async function getClient(): Promise<RedisClientType> {
     const password = Deno.env.get("REDIS_PASSWORD");
 
     if (!host || !port) {
-      throw new Error("REDIS_HOST and REDIS_PORT environment variables must be set.");
+      throw new Error(
+        "REDIS_HOST and REDIS_PORT environment variables must be set.",
+      );
     }
 
     console.log(`Attempting to connect to Redis at ${host}:${port}`);
 
     const url = `redis://${host}:${port}`;
-   
+
     client = createClient({
       url: url,
       password: password,
