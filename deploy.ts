@@ -19,7 +19,7 @@ async function runCommand(cmd: string, args: string[]) {
 
 const bumpType = Deno.args[0];
 if (!["patch", "minor", "major"].includes(bumpType)) {
-  console.error("Usage: deno run bump_and_tag.ts <patch|minor|major>");
+  console.error("Usage: deno run deploy.ts <patch|minor|major>");
   Deno.exit(1);
 }
 
