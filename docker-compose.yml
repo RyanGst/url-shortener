@@ -25,7 +25,7 @@ services:
        - letsencrypt:/letsencrypt
        - /var/run/docker.sock:/var/run/docker.sock
   app:
-    image: ghcr.io/ryangst/url-shortener:latest
+    image: ghcr.io/ryangst/url-shortener:${GIT_TAG:-latest}
     build: .
     depends_on:
       - redis
