@@ -6,7 +6,7 @@ services:
     depends_on:
       - redis
     ports:
-      - "8000:8000"
+      - "80:8000"
     environment:
       - DENO_ENV=${DENO_ENV:-production}
       - REDIS_HOST=${REDIS_HOST:-redis}
@@ -14,6 +14,9 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-redis}
     command: ["deno", "run", "--allow-net", "--allow-env", "main.ts"]
     restart: unless-stopped
+    deploy:
+      update_config:
+        order: start-first
   redis:
     image: "redis/redis-stack"
     volumes:
