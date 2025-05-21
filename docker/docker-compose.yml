@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  app:
+  url-shortener:
     image: ghcr.io/ryangst/url-shortener:${GIT_TAG:-latest}
     build:
       context: ..
@@ -11,11 +11,11 @@ services:
       - 8000:8000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`url.ryanmac.dev`)"
-      - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.tls.certresolver=myresolver"
-      - "traefik.http.routers.app.service=app"
-      - "traefik.http.services.app.loadbalancer.server.port=8000"
+      - "traefik.http.routers.url-shortener.rule=Host(`url.ryanmac.dev`)"
+      - "traefik.http.routers.url-shortener.entrypoints=websecure"
+      - "traefik.http.routers.url-shortener.tls.certresolver=myresolver"
+      - "traefik.http.routers.url-shortener.service=url-shortener"
+      - "traefik.http.services.url-shortener.loadbalancer.server.port=8000"
     environment:
       - DENO_ENV=${DENO_ENV:-production}
       - REDIS_HOST=${REDIS_HOST:-redis}
