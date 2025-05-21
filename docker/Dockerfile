@@ -4,10 +4,11 @@ FROM denoland/deno:2.2.12
 WORKDIR /app
 
 # Copy source
-COPY . .
+COPY .. .
 
 # Compile the main app
 RUN deno cache main.ts
 
+EXPOSE 8000
 # Run the apps
 CMD ["deno", "run", "--allow-net", "--allow-env", "main.ts"]

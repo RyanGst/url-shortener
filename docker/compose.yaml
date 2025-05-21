@@ -6,9 +6,6 @@ services:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       - "--entryPoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=ryangst.hire@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
@@ -26,12 +23,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   app:
     image: ghcr.io/ryangst/url-shortener:${GIT_TAG:-latest}
-    build: .
+    build: ..
     depends_on:
       - redis
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`url.unnamd.cloud`)"
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.tls.certresolver=myresolver"
       - "traefik.http.routers.app.service=app"
@@ -44,12 +40,17 @@ services:
     command: [
       "deno",
       "run",
+      "--watch",
       "--allow-net",
       "--allow-read",
       "--allow-env",
       "main.ts",
     ]
     restart: unless-stopped
+    ports:
+      - 8000:8000
+    volumes:
+      - ..:/app
     deploy:
       update_config:
         order: start-first
